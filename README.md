@@ -1,4 +1,4 @@
 # Today I Learned(TIL)
 >오늘 배운 내용을 정리해두는 저장소
 - ### Java
-  - [OOP 1 요약정리]
+  - OOP 1 요약정리
