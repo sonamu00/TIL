@@ -9,5 +9,6 @@
   - [Web Service 기본개념](https://github.com/ChaewonHan/TIL/blob/main/Web%20Service%20%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90.md)
   - [DOM](https://github.com/ChaewonHan/TIL/blob/main/DOM.md)
 ### JavaScript
-  - 
+  - [함수](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%ED%95%A8%EC%88%98.md)
+  - [객체](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EA%B0%9D%EC%B2%B4.md)
 
