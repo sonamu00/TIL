@@ -11,4 +11,5 @@
 ### JavaScript
   - [함수](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%ED%95%A8%EC%88%98.md)
   - [객체](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EA%B0%9D%EC%B2%B4.md)
+  - [내장객체](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EB%82%B4%EC%9E%A5%20%EA%B0%9D%EC%B2%B4.md)
 
