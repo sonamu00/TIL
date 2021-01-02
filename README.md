@@ -14,4 +14,6 @@
   - [내장객체](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EB%82%B4%EC%9E%A5%20%EA%B0%9D%EC%B2%B4.md)
   - [정규표현식](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D.md)
 ### JQuery
-  - [JQuery 기본 개념](https://github.com/ChaewonHan/TIL/blob/main/JQuery/JQuery%20%EA%B8%B0%EB%B3%B8%20%EA%B0%9C%EB%85%90.md)
+  - [jQuery 기본 개념](https://github.com/ChaewonHan/TIL/blob/main/JQuery/JQuery%20%EA%B8%B0%EB%B3%B8%20%EA%B0%9C%EB%85%90.md)
+  - [jQuery 객체 조작](https://github.com/ChaewonHan/TIL/blob/main/JQuery/%EA%B0%9D%EC%B2%B4%20%EC%A1%B0%EC%9E%91.md)
+  - [jQuery 객체 탐색](https://github.com/ChaewonHan/TIL/blob/main/JQuery/%EA%B0%9D%EC%B2%B4%20%ED%83%90%EC%83%89.md)
