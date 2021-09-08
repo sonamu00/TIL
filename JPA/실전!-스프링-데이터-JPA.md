@@ -133,4 +133,284 @@ List<MemberDto> findMemberDto();
     }
     ```
 ## 반환 타입
+스프링 데이터 JPA는 유연한 반환 타입 지원함
+```java
+List<Member> findListByUsername(String username); //컬렉션
 
+Member findMemberByUsername(String username); //단건
+
+Optional<Member> findOptionalByUsername(String username); //단건 Optional
+```
+### 조회 결과가 많거나 없는 경우
+```java
+ @Test
+    public void returnType() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        Member findMember = memberRepository.findOptionalByUsername("empty");
+        System.out.println("findMember = " + findMember); //결과: null
+    }
+```
+- 컬렉션
+  - 결과 없음: 빈 컬렉션 반환
+- 단건 조회
+  - 결과 없음: null 반환
+  - 결과가  2건 이상: `javax.persistence.NonUniqueResultException` 예외 발생
+
+JPA는 결과 값이 없으면 `javax.persistence.NoResultException` 예외가 발생하지만, 스프링 데이터 JPA는 단건으로 조회할 때 이 예외가 발생하면 무시하고 대신에 `null`을 반환한다.
+
+## 순수 JPA 페이징과 정렬
+다음 조건으로 페이징과 정렬을 사용하는 예제 코드를 보자.
+- 검색 조건: 나이가 10살
+- 정렬 조건: 이름으로 내림차순
+- 페이징 조건: 첫 번쨰 페이지, 페이지당 보여줄 데이터는 3건
+
+*jpa 페이징 리포지토리*
+```java
+public List<Member> findByPage(int age, int offset, int limit) {
+        return em.createQuery("select m from Member m where m.age = :age order by m.username desc")
+                .setParameter("age", age)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+public long totalCount(int age) {
+        return em.createQuery("select count(m) from Member m where m.age = :age", Long.class)
+                .setParameter("age", age)
+                .getSingleResult();
+    }
+```
+*JPA 페이징 테스트 코드*
+```java
+@Test
+public void paging() throws Exception {
+    //given
+    memberJpaRepository.save(new Member("member1", 10));
+    memberJpaRepository.save(new Member("member2", 10));
+    memberJpaRepository.save(new Member("member3", 10));
+    memberJpaRepository.save(new Member("member4", 10));
+    memberJpaRepository.save(new Member("member5", 10));
+
+    int age = 10;
+    int offset = 0;
+    int limit = 3;
+
+    //when
+    List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+    long totalCount = memberJpaRepository.totalCount(age);
+
+    //페이지 계산 공식 적용...
+    // totalPage = totalCount / size ...
+    // 마지막 페이지 ...
+    // 최초 페이지 ..
+    
+    //then
+    assertThat(members.size()).isEqualTo(3);
+    assertThat(totalCount).isEqualTo(5);
+}
+```
+## 스프링 데이터 JPA 페이징과 정렬
+### 페이징과 정렬 파라미터
+- `org.springframework.data.domain.Sort`: 정렬 기능
+- `org.springframework.data.domain.Pageable`: 페이징 기능(내부에 `Sort` 포함)
+
+### 특별한 반환타입
+- `org.springframework.data.domain.Page`: 추가 count 쿼리 결과를 포함하는 페이징
+- `org.springframework.data.domain.Slice`: 추가 count 쿼리 없이 다음 페이지만 확인 가능(내부적으로 limit + 1 조회), 모바일 리스트에서 주로 사용함
+- `List`(자바 컬렉션): 추가 count 쿼리 없이 결과만 반환
+### 페이징과 정렬 사용 예제
+```java
+Page<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사용
+
+Slice<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사용 X
+
+List<Member> findByUsername(String name, Pageable pageable); //count 쿼리 사용 X
+
+List<Member> findByUsername(String name, Sort sort);
+```
+*Page 사용 예제 정의 코드*
+```java
+public interface MemberRepository extends Repository<Member, Long> {
+  Page<Member> findByAge(int age, Pageable pageable);
+}
+```
+*Page 사용 예제 실행 코드*
+```java
+//페이징 조건과 정렬 조건 설정
+@Test
+public void page() throws Exception {
+  //given
+  memberRepository.save(new Member("member1", 10));
+  memberRepository.save(new Member("member2", 10));
+  memberRepository.save(new Member("member3", 10));
+  memberRepository.save(new Member("member4", 10));
+  memberRepository.save(new Member("member5", 10));
+
+  //when
+  PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC,
+  "username"));
+  Page<Member> page = memberRepository.findByAge(10, pageRequest);
+
+  //then
+  List<Member> content = page.getContent(); //조회된 데이터
+  assertThat(content.size()).isEqualTo(3); //조회된 데이터 수
+  assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수
+  assertThat(page.getNumber()).isEqualTo(0); //페이지 번호
+  assertThat(page.getTotalPages()).isEqualTo(2); //전체 페이지 번호
+  assertThat(page.isFirst()).isTrue(); //첫번째 항목인가?
+  assertThat(page.hasNext()).isTrue(); //다음 페이지가 있는가?
+}
+```
+`PageRequest` 생성자의 첫 번째 파라미터에는 현재 페이지를, 두 번째 파라미터에는 조회할 데이터 수를 입력한다. 여기에 추가로 정렬 정보도 파라미터로 사용할 수 있다. 참고로 페이지는 0부터 시작한다.
+
+*count 쿼리 분리*
+```java
+//totalCount를 조회할 때 조인할 필요가 없을 경우 countQuery를 사용하여 성능 최적화
+@Query(value = "select m from Member m left join m.team t", countQuery = "select count(m.username) from Member m")
+Page<Member> findByAge(int age, Pageable pageable);
+
+```
+조인이 많은 쿼리일 때 카운트 쿼리를 분리하지 않으면 count 쿼리가 매우 무거워 진다. 이럴 경우 꼭 `countQuery`를 사용해서 분리하자.
+## 벌크성 수정 쿼리
+- 특정 하나가 아닌 다수의 데이터를 수정하는 쿼리를 말한다.
+- 특정 데이터를 모두 변경할 때 변경 감지를 해서 하나씩 수정하는 것 보다 모두 변경하는 쿼리(벌크성 수정 쿼리)를 한 번에 보내는 것이 효율적이다.
+### 순수 JPA를 사용한 벌크성 수정 쿼리
+```java
+public int bulkAgePlus(int age) {
+  int resultCount = em.createQuery(
+      "update Member m set m.age = m.age + 1" +
+      "where m.age >= :age")
+      .setParameter("age", age)
+      .executeUpdate();
+
+  return resultCount;
+}
+```
+```java
+@Test
+public void bulkUpdate() throws Exception {
+  //given
+  memberJpaRepository.save(new Member("member1", 10));
+  memberJpaRepository.save(new Member("member2", 19));
+  memberJpaRepository.save(new Member("member3", 20));
+  memberJpaRepository.save(new Member("member4", 21));
+  memberJpaRepository.save(new Member("member5", 40));
+  
+  //when
+  int resultCount = memberJpaRepository.bulkAgePlus(20);
+  
+  //then
+  assertThat(resultCount).isEqualTo(3);
+}
+```
+### 스프링 데이터 JPA를 사용한 벌크성 수정 쿼리
+```java
+@Modifying(clearAutomatically = true) //executeUpdate()를 실행함
+@Query("update Member m set m.age = m.age + 1 where m.age >= :age")
+int bulkAgePlus(@Param("age") int age);
+```
+```java
+    @Test
+    public void bulkUpdate() throws Exception {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        //when
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member5 = result.get(0);
+        System.out.println("member5 = " + member5);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+    }
+```
+- 벌크성 수정, 삭제 쿼리는 `@Modifying` 어노테이션을 사용한다.
+  - 사용하지 않으면 `.getResultList()`, `.getSingleResult()`를 반환해서 `org.hibernate.hql.internal.QueryExecutionRequestException: Not supported for DML operations` 가 발생한다.
+- 벌크성 쿼리를 실행하고 나서 영속성 컨텍스트 초기화 `@Modifying(clearAutomatically = true)`를 해야 한다.
+  - 벌크성 쿼리는 영속성 컨텍스트를 무시하고 실행하기 때문에, 영속성 컨텍스트에 있는 엔티티의 상태와 DB에 엔티티 상태가 달라질 수 있다.
+  - 벌크 연산 후에 다시 조회해야 하면 꼭 영속성 컨텍스트를 초기화하자.
+  
+## @EntityGraph
+  연관된 엔티티를 한 번에 조회하는 방법(페치 조인)이다.
+### 순수 JPA 페치 조인
+  ```java
+  @Query("select m from Member m left join fetch m.team")
+  List<Member> findMemberFetchJoin();
+  ```
+  - 복잡한 쿼리에서 적합한 방식히다.
+  - 간단한 조회문도 쿼리를 작성해야 하는 단점이 있다.
+### 스프링 데이터 JPA의 EntityGraph
+```java
+  //공통 메서드 오버라이드
+  @Override
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findAll();
+  
+  //JPQL + 엔티티 그래프
+  @EntityGraph(attributePaths = {"team"})
+  @Query("select m from Member m")
+  List<Member> findMemberEntityGraph();
+  
+  //메서드 이름으로 쿼리에서 특히 편리하다.
+  @EntityGraph(attributePaths = {"team"})
+  List<Member> findByUsername(String username)
+```
+- 엔티티 그래프 기능을 편리하게 사용하게 도와준다.
+- JPQL 없이 페치 조인을 사용할 수 있다. (JPQL + 엔티티 그래프도 가능)
+  
+*참고*  
+fetch Join은 innerJoin, outerJoin 선택이 가능하지만, EntityGraph는 outerJoin만 가능하다.
+
+## JPA Hint & Lock
+- JPA 구현체에 쿼리에 대한 힌트를 주는 것이다.
+- 데이터 조회 시 1차 캐시에 저장하고, 변경 감지를 위한 스냅샷 저장 등 객체 상태의 정보 유지를 위한 과정을 거친다.
+- 조회가 목적인 경우 객체 상태의 정보 유지를 위한 과정은 불필요 하며, 이런 과정을 쿼리 힌트로 최적화한다.
+- 성능 최적화가 필요할 때 다양한 방법과 비교해서 선택하자.
+  - 조회 쿼리에 모두 추가해도 생각보다 최적화 효과가 미비할 수 있으므로.
+  
+*쿼리 힌트 사용*
+```java
+  @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value =
+  "true"))
+  Member findReadOnlyByUsername(String username);
+```
+*쿼리 힌트 사용 확인*
+```java
+  @Test
+  public void queryHint() throws Exception {
+    //given
+    memberRepository.save(new Member("member1", 10));
+    
+    em.flush();
+    em.clear();
+    
+    //when
+    Member member = memberRepository.findReadOnlyByUsername("member1");
+    member.setUsername("member2");
+    em.flush(); //Update Query 실행X
+  }
+```
+*쿼리 힌트 Page 추가*
+```java
+  @QueryHints(value = { @QueryHint(name = "org.hibernate.readOnly", value = "true")}, forCounting = true)
+  Page<Member> findByUsername(String name, Pagable pageable);
+```
+forCounting : 반환 타입으로 `Page` 인터페이스를 적용하면 추가로 호출하는 페이징을 위한 count 쿼리도 쿼리 힌트 적용(기본값 true)
+## Lock
+```java
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  List<Member> findByUsername(String name);
+```
+- `org.springframework.data.jpa.repository.Lock` 어노테이션을 사용
+- 개념적으로 깊은 내용이라서 따로 개념 이해를 위한 공부를 추천
+- JPA가 제공하는 락은 JPA 책 16.1 트랜잭션과 락 절을 참고
