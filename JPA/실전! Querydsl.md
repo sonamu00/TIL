@@ -1,6 +1,8 @@
 > [실전! Querydsl](https://www.inflearn.com/course/Querydsl-%EC%8B%A4%EC%A0%84/dashboard)을 보고 정리한 글 입니다.
 <br/>
-# 기본 문법
+
+# 기본 문법 
+
 ## JPQL vs Querydsl
 *JPQL*
 ```java
