@@ -462,4 +462,47 @@ t=[Member(id=7, username=teamA, age=0), Team(id=1, name=teamA)]
 t=[Member(id=8, username=teamB, age=0), Team(id=2, name=teamB)]
 ```
 
+## 조인 - 페치 조인
+페치 조인은 SQL 조인을 활용해서 연관된 엔티티를 SQL 한번에 조회하는 기능이다. 자세한 내용은 JPA 기본편 페치 조인 참고.
+
+### 페치 조인 미적용
+```java
+    @PersistenceUnit
+    EntityManagerFactory emf;
+
+    @Test
+    public void fetchJoinNo() {
+        em.flush();
+        em.clear();
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(member.username.eq("member1"))
+                .fetchOne();
+
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+        assertThat(loaded).as("패치 조인 미적용").isFalse();
+    }
+```
+지연로딩으로 Member, Team SQL 쿼리 각각 실행한다.
+
+### 페치 조인 적용
+```java
+    @Test
+    public void fetchJoinUse() {
+        em.flush();
+        em.clear();
+
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .join(member.team, team).fetchJoin()
+                .where(member.username.eq("member1"))
+                .fetchOne();
+
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+        assertThat(loaded).as("패치 조인 적용").isTrue();
+    }
+```
+- 즉시로딩으로 Member, Team SQL 쿼리 조인으로 한번에 조회한다.
+- `join()` 뒤에 `fetchJoin()` 이라고 추가해서 사용하면 된다.
 
