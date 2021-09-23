@@ -719,4 +719,5 @@ Querydsl은 자바 코드로 작성하기 때문에 rankPath처럼 복잡한 조
     }
     // 결과: member1_10
 ```
-문자가 아닌 다른 타입들은 `stringValue()`로 문자로 변환할 수 있다. `stringValue()`는 ENUM을 처리할 때 자주 사용한다.
+- 문자가 아닌 다른 타입들은 `stringValue()`로 문자로 변환할 수 있다. 
+- `stringValue()`는 ENUM을 처리할 때 자주 사용한다.
