@@ -7,7 +7,7 @@
   - [지네릭스](https://github.com/ChaewonHan/TIL/blob/main/Java/%EC%A7%80%EB%84%A4%EB%A6%AD%EC%8A%A4.md)
 ## JPA
   - [실전! 스프링 데이터 JPA](https://github.com/ChaewonHan/TIL/blob/36ec5aef829d58b45364811571d6115aee789039/JPA/%EC%8B%A4%EC%A0%84!-%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA.md)
-  - [실전! Querydsl](https://github.com/ChaewonHan/TIL/blob/00b0d52556bae289758eeaf831dc7b5661f129cf/JPA/%EC%8B%A4%EC%A0%84!%20Querydsl.md)
+  - [실전! Querydsl](JPA/실전! Querydsl.md)
 ## JavaScript
   - [함수](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%ED%95%A8%EC%88%98.md)
   - [객체](https://github.com/ChaewonHan/TIL/blob/main/JavaScript/%EA%B0%9D%EC%B2%B4.md)
