@@ -721,3 +721,42 @@ Querydsl은 자바 코드로 작성하기 때문에 rankPath처럼 복잡한 조
 ```
 - 문자가 아닌 다른 타입들은 `stringValue()`로 문자로 변환할 수 있다. 
 - `stringValue()`는 ENUM을 처리할 때 자주 사용한다.
+
+# 중급 문법
+
+## 프로젝션과 결과 반환 - 기본
+select의 대상을 지정하는 것을 프로젝션이라고 한다.
+
+### 프로젝션 대상이 하나
+```java
+List<String> result = queryFactory
+ .select(member.username)
+ .from(member)
+ .fetch();
+```
+- 프로젝션 대상이 하나면 타입을 명확하게 지정할 수 있다.
+- 프로젝션 대상이 둘 이상이면 튜플이나 DTO로 조회한다.
+  
+### 튜플 조회
+프로젝션 대상이 둘 이상일 때 사용한다.
+
+```java
+List<Tuple> result = queryFactory
+    .select(member.username, member.age)
+    .from(member)
+    .fetch();
+
+for (Tuple tuple : result) {
+    String username = tuple.get(member.username);
+    Integer age = tuple.get(member.age);
+    System.out.println("username=" + username);
+    System.out.println("age=" + age);
+}
+```
+
+**참고**
+
+- `Tuple`은 Querydsl에 종속적인 타입이기 때문에 리포짓토리나 DAO 계층에서만 사용하는 것을 권장한다. 
+- 하부 구현 기술(JPA, Querydsl)을 앞 단(Controller, Service)계층에서 알게 되면 하부 기술을 바꾸기 어렵다.
+- Querydsl의 `Tuple`, JDBC의 `ResultSet` 같은 결과값을 앞 단에서 사용해야 할 경우에는 DTO로 변환해서 내보내자.
+
