@@ -760,3 +760,139 @@ for (Tuple tuple : result) {
 - 하부 구현 기술(JPA, Querydsl)을 앞 단(Controller, Service)계층에서 알게 되면 하부 기술을 바꾸기 어렵다.
 - Querydsl의 `Tuple`, JDBC의 `ResultSet` 같은 결과값을 앞 단에서 사용해야 할 경우에는 DTO로 변환해서 내보내자.
 
+## 프로젝션과 결과 반환 - DTO 조회
+
+**예제의 MemberDto 코드**
+
+```java
+@Data
+@NoArgsConstructor
+public class MemberDto {
+
+    private String username;
+    private int age;
+
+    public MemberDto(String username, int age) {
+        this.username = username;
+        this.age = age;
+    }
+}
+```
+### 순수 JPA에서 DTO 조회 코드
+
+```java
+    @Test
+    public void findDtoByJPQL() {
+        List<MemberDto> result = em.createQuery("select new study.querydsl.dto.MemberDto(m.username, m.age)" +
+                " from Member m", MemberDto.class)
+                .getResultList();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+```
+- 순수 JPA에서는 DTO를 조회할 때 new 명령어를 꼭 명시해야 한다.
+- 단점
+  - DTO의 패키지 이름을 다 적어줘야 해서 오타가 날 수 있고 지저분하다.
+  - 생성자 방식만 지원한다.
+
+### Querydsl 빈 생성(Bean population)
+결과를 dto로 반환할 때 사용하는 방식이다. 프로퍼티 접근, 필드 직접 접근, 생성자 사용 접근 방법을 지원한다.
+
+**프로퍼티(setter) 접근**
+```java
+    @Test
+    public void findDtoBySetter() {
+        List<MemberDto> result = queryFactory
+                .select(Projections.bean(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+```
+`Projections`의 `bean()`에 dto 클래스를 적으면 된다.
+- 필드에 프로퍼티로 접근하기 때문에 필드 이름이 다르면 안된다.
+
+
+**필드 직접 접근**
+```java
+    @Test
+    public void findDtoByField() {
+        List<MemberDto> result = queryFactory
+                .select(Projections.fields(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+```
+- `Projections`의 `fields()`에 dto 클래스를 적으면 된다.
+- 필드에 직접 접근하기 때문에 필드 이름이 다르면 안된다.
+
+
+**필드 이름과 별칭이 다를 때**
+
+```java
+package study.querydsl.dto;
+import lombok.Data;
+
+@Data
+public class UserDto {
+    private String name;
+    private int age;
+}
+```
+```java
+    @Test
+    public void findUserDto() {
+        QMember memberSub = new QMember("memberSub");
+
+        List<MemberDto> result = queryFactory
+                .select(Projections.fields(MemberDto.class,
+                        member.username.as("name"),
+                        ExpressionUtils.as(JPAExpressions
+                        .select(memberSub.age.max())
+                                .from(memberSub), "age")))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+```
+- 프로퍼티 방식, 필드 접근 생성 방식에서 이름이 다를 때 `as()`를 사용한다.
+- `ExpressionUtils.as(source,alias)` : 필드, 서브 쿼리에 별칭 적용
+- `username.as("memberName")` : 필드에 별칭 적용
+
+
+**생성자 사용**
+```java
+    @Test
+    public void findDtoByConstructor() {
+        List<MemberDto> result = queryFactory
+                .select(Projections.constructor(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+```
+클래스로 접근하기 때문에 필드 이름과 별칭이 달라고 상관 없다.
+
+
+
