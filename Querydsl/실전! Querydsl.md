@@ -1408,3 +1408,192 @@ public class MemberController {
     }
 }
 ```
+
+# 실무 활용 - 스프링 데이터 JPA와 Querydsl
+## 사용자 정의 리포지토리
+스프링 데이터 JPA를 사용할 경우 Querydsl를 사용한 커스텀 기능을 사용자 정의 인터페이스에 작성해야 한다.
+
+### 사용자 정의 리포지토리 사용법
+
+1. 사용자 정의 인터페이스 작성
+```java
+public interface MemberRepositoryCustom {
+    List<MemberTeamDto> search(MemberSearchCondition condition);
+}
+```
+사용하고자 하는 커스텀 기능을 사용자 정의 인터페이스에 작성한다.
+
+  
+2. 사용자 정의 인터페이스 구현
+```java
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
+
+    private final JPAQueryFactory queryFactory;
+
+    public MemberRepositoryImpl(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public List<MemberTeamDto> search(MemberSearchCondition condition) {
+        return queryFactory
+                .select(new QMemberTeamDto(
+                        member.id.as("memberId"),
+                        member.username,
+                        member.age,
+                        team.id.as("teamId"),
+                        team.name.as("teamName")))
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                )
+                .fetch();
+    }
+
+    private BooleanExpression usernameEq(String username) {
+        return hasText(username) ? member.username.eq(username) : null;
+    }
+
+    private BooleanExpression teamNameEq(String teamName) {
+        return hasText(teamName) ? team.name.eq(teamName) : null;
+    }
+
+    private BooleanExpression ageGoe(Integer ageGoe) {
+        return ageGoe != null ? member.age.goe(ageGoe) : null;
+    }
+
+    private BooleanExpression ageLoe(Integer ageLoe) {
+        return ageLoe != null ? member.age.loe(ageLoe) : null;
+    }
+}
+```
+사용자 정의 인터페이스를 상속 받아서 구현한다.
+
+3. 스프링 데이터 리포지토리에 사용자 정의 인터페이스 상속
+```java
+public interface MemberRepository extends JpaRepository<Member, Long>,
+MemberRepositoryCustom {
+    List<Member> findByUsername(String username);
+}
+```
+`JpaRepository`가 있는 곳(스프링 데이터 리포지토리)에 사용자 정의 인터페이스를 상속한다.
+
+**참고**  
+특정 API나 화면에 종속되어 있으면 별도로 조회용 리포지토리를 만들어 사용하는 것이 아키텍쳐 설계 상으로 좋다. 엔티티를 많이 검색하거나 재사용성이 좋은 경우는 사용자 정의 인터페이스에 정의해서 재사용성을 높이도록 하자.
+
+## 스프링 데이터 페이징 활용1 - Querydsl 페이징 연동
+- 스프링 데이터의 Page, Pageable을 활용하는 방법
+  - 전체 카운트를 한번에 조회하는 단순한 방법
+  - 데이터 내용과 전체 카운트를 별도로 조회하는 방법
+  
+**사용자 정의 인터페이스에 페이징 2가지 추가**
+```java
+public interface MemberRepositoryCustom {
+    List<MemberTeamDto> search(MemberSearchCondition condition);
+
+    Page<MemberTeamDto> searchPageSimple(MemberSearchCondition condition,Pageable pageable);
+
+    Page<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable);
+}
+```
+
+### 전체 카운트를 한번에 조회하는 단순한 방법
+```java
+@Override
+    public Page<MemberTeamDto> searchPageSimple(MemberSearchCondition condition, Pageable pageable) {
+        QueryResults<MemberTeamDto> results = queryFactory
+                .select(new QMemberTeamDto(
+                        member.id.as("memberId"),
+                        member.username,
+                        member.age,
+                        team.id.as("teamId"),
+                        team.name.as("teamName")))
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                )
+                .offset(pageable.getOffset()) //페이지 시작 번호 지정
+                .limit(pageable.getPageSize()) //조회할 때 가져올 데이터 수
+                .fetchResults(); //Content 쿼리와 Count 쿼리도 같이 보냄
+
+        List<MemberTeamDto> content = results.getResults(); //데이터 리스트에 담음
+        long total = results.getTotal(); //가져온 데이터 개수
+
+        return new PageImpl<>(content, pageable, total); //PageImpl: 스프링 데이터의 Page 구현체
+    }
+```
+- Querydsl이 제공하는 `fetchResults()`를 사용하면 내용과 전체 카운트를 한번에 조회할 수 있다.(실제 쿼리는 2번 호출)
+- `fetchResult()`는 카운트 쿼리 실행시 필요없는 `order by` 는 제거한다.
+
+### 데이터 내용과 전체 카운트를 별도로 조회하는 방법
+```java
+    @Override
+    public Page<MemberTeamDto> searchPageComplex(MemberSearchCondition condition, Pageable pageable) {
+        List<MemberTeamDto> content = queryFactory
+                .select(new QMemberTeamDto(
+                        member.id.as("memberId"),
+                        member.username,
+                        member.age,
+                        team.id.as("teamId"),
+                        team.name.as("teamName")))
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(member)
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                )
+                .fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+```
+- 전체 카운트를 조회 하는 방법을 최적화 할 수 있으면 카운트 쿼리를 분리하면 된다.
+  - ex) 전체 카운트를 조회할 때 카운트 쿼리를 분리하면 조인 쿼리를 줄일 수 있어 성능 향상에 상당한 효과가 있다.
+- 코드를 리팩토링해서 내용 쿼리와 전체 카운트 쿼리를 따로 메소드로 분리하여 읽기 좋게 하는 것을 권장함
+
+## 스프링 데이터 페이징 활용2 - CountQuery 최적화
+```java
+        JPAQuery<Member> countQuery = queryFactory
+                .select(member)
+                .from(member)
+                .leftJoin(member.team, team)
+                .where(
+                        usernameEq(condition.getUsername()),
+                        teamNameEq(condition.getTeamName()),
+                        ageGoe(condition.getAgeGoe()),
+                        ageLoe(condition.getAgeLoe())
+                );
+        // return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+```
+- `PageableExecutionUtils.getPage()`로 최적화 할 수 있다.
+- count 쿼리가 생략 가능한 경우에 생략해서 처리해준다.
+  - 페이지 시작이면서 컨텐츠 사이즈가 페이지 사이즈보다 작을 때(첫 번째 페이지이자 마지막 페이지)
+  - 마지막 페이지 일 때 
+    - 컨텐츠 사이즈가 페이지 사이즈보다 작을 때 마지막 페이지가 된다. 이때 offset + 컨텐츠 사이즈를 더하면 totalCount를 구할 수 있어서 카운트 쿼리가 필요없다.
+  - 위에 조건이 만족하지 않을 때에만 `countQuery::fetchCount`를 실행한다.
