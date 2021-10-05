@@ -1597,3 +1597,59 @@ public interface MemberRepositoryCustom {
   - 마지막 페이지 일 때 
     - 컨텐츠 사이즈가 페이지 사이즈보다 작을 때 마지막 페이지가 된다. 이때 offset + 컨텐츠 사이즈를 더하면 totalCount를 구할 수 있어서 카운트 쿼리가 필요없다.
   - 위에 조건이 만족하지 않을 때에만 `countQuery::fetchCount`를 실행한다.
+
+# 스프링 데이터 JPA가 제공하는 Querydsl 기능
+여기서 소개하는 기능은 제약이 커서 복잡한 실무 환경에서 사용하기에는 많이 부족하다. 그래도 스프링 데이터에서 제공하는 기능이므로 간단히 소개하고, 왜 부족한지 설명하겠다.
+
+## 인터페이스 지원 - QuerydslPredicateExecutor
+공식 URL: https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#core.extensions.querydsl
+
+**QuerydslPredicateExecutor 인터페이스**
+```java
+public interface QuerydslPredicateExecutor<T> {
+    Optional<T> findById(Predicate predicate);
+    Iterable<T> findAll(Predicate predicate);
+    long count(Predicate predicate);
+    boolean exists(Predicate predicate);
+    // … more functionality omitted.
+}
+```
+
+**리포지토리에 적용**
+```java
+interface MemberRepository extends JpaRepository<User, Long>,
+QuerydslPredicateExecutor<User> {
+}
+```
+```java
+Iterable result = memberRepository.findAll(
+    member.age.between(10, 40).and(member.username.eq("member1"))
+);
+```
+### 한계점
+- 조인X (묵시적 조인은 가능하지만 left join이 불가능하다.)
+- 클라이언트가 Querydsl에 의존해야 한다. 
+  - 서비스 클래스가 Querydsl이라는 구현 기술에 의존해야 한다.
+- 복잡한 실무환경에서 사용하기에는 한계가 명확하다.
+
+## Querydsl Web 지원
+공식 URL: https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#core.web.type-safe  
+
+### 한계점
+- 단순한 조건만 가능
+- 조건을 커스텀하는 기능이 복잡하고 명시적이지 않음
+- 컨트롤러가 Querydsl에 의존
+- 복잡한 실무환경에서 사용하기에는 한계가 명확
+
+## 리포지토리 지원 - QuerydslRepositorySupport
+### 장점
+- `getQuerydsl().applyPagination()` 스프링 데이터가 제공하는 페이징을 Querydsl로 편리하게 변환 가능(Sort는 오류발생)
+- `from()` 으로 시작 가능(최근에는 QueryFactory를 사용해서 `select()`로 시작하는 것이 더 명시적)
+- `EntityManager` 제공
+
+### 한계
+- Querydsl 3.x 버전을 대상으로 만듬
+- Querydsl 4.x에 나온 JPAQueryFactory로 시작할 수 없음
+- select로 시작할 수 없음 (from으로 시작해야함)
+- QueryFactory 를 제공하지 않음
+- 스프링 데이터 Sort 기능이 정상 동작하지 않음
