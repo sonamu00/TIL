@@ -4,7 +4,7 @@
 # 기본 문법 
 
 ## JPQL vs Querydsl
-*JPQL*
+### JPQL
 ```java
     @Test
     public void startJPQL() {
@@ -18,8 +18,8 @@
 ```
 - 쿼리문에 오타가 있을 경우 실행 시점에 오류가 난다.
 - 파라미터 바인딩을 직접 처리해야 한다.
-  
-*Querydsl*
+
+### Querydsl
 ```java
     @Test
     public void startQuerydsl() {
@@ -38,7 +38,7 @@
 - 쿼리문에 오타가 있을 경우 컴파일 시점에서 오류가 난다.
 - 파라미터 바인딩을 자동으로 처리한다.
 
-*인터페이스 설명*
+### 인터페이스 설명
 - `JPAQueryFactory`: QueryDSL을 사용하여 쿼리를 Build 할 때 사용함
 - `EntityManager` 로 `JPAQueryFactory` 생성
   - `JPAQueryFactory`는 `EntityManager`를 통해 질의를 처리함
@@ -332,7 +332,6 @@ long count = queryFactory
 join(조인 대상, 별칭으로 사용할 Q타입)
 ```
 
-*기본 조인*
 ```java
     /**
      * 팀 A에 소속된 모든 회원
@@ -409,7 +408,8 @@ join(조인 대상, 별칭으로 사용할 Q타입)
         }
     }
 ```
-*결과*
+  
+**결과**
 ```java
 t=[Member(id=3, username=member1, age=10), Team(id=1, name=teamA)]
 t=[Member(id=4, username=member2, age=20), Team(id=1, name=teamA)]
@@ -419,6 +419,7 @@ t=[Member(id=6, username=member4, age=40), null]
 > 참고: on 절을 활용해 조인 대상을 필터링 할 때, 외부조인이 아니라 내부조인(inner join)을 사용하면,
 where 절에서 필터링 하는 것과 기능이 동일하다. 따라서 on 절을 활용한 조인 대상 필터링을 사용할 때,
 내부조인 이면 익숙한 where 절로 해결하고, 정말 외부조인이 필요한 경우에만 이 기능을 사용하자.
+  
 
 ### 연관관계 없는 엔티티 외부 조인
 ```java
@@ -452,7 +453,7 @@ where 절에서 필터링 하는 것과 기능이 동일하다. 따라서 on 절
   - on조인: `from(member).leftJoin(team).on(xxx)`
 
 
-*결과*
+**결과**
 ```java
 t=[Member(id=3, username=member1, age=10), null]
 t=[Member(id=4, username=member2, age=20), null]
@@ -610,7 +611,7 @@ JPA JPQL 서브쿼리의 한계점으로 from 절의 서브쿼리(인라인 뷰)
 2. 애플리케이션에서 쿼리를 2번 분리해서 실행한다.
 3. nativeSQL을 사용한다.
 
-*참고*
+**참고**
 
 - 쿼리로 로직들을 해결할 때 from절 서브쿼리가 발생할 경우가 많다.
   - ex) 뷰에 보여줄 데이터(날짜 포맷)를 애플리케이션 내에서 해결하지 않고 쿼리문을 만들어 데이터를 꺼내온다.
