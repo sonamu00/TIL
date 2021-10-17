@@ -1,5 +1,6 @@
 > [자바 ORM 표준 JPA 프로그래밍 - 기본편](https://www.inflearn.com/course/ORM-JPA-Basic/dashboard)을 보고 정리한 글 입니다.
 
+# JPA 소개
 ## SQL 중심적인 개발의 문제점
 
 - SQL 매핑 무한 반복
