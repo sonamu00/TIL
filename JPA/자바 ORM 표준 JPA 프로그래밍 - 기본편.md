@@ -30,9 +30,11 @@
         
 - 데이터 식별 방법
     - DAO
+    
     ![img1](img/Untitled.png)
         
     - 자바 컬렉션
+    
     ![img2](img/Untitled1.png)
     
     
