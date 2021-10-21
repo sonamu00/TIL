@@ -20,7 +20,7 @@
 - 네트워크모뎀 등
 
 ## 프로세서(Processor)
-<img src='./img/1.png' >
+![1](https://github.com/ChaewonHan/TIL/blob/81250c1e52bb89184e5a1a6794d9cb8eeb6f6a2f/Operating%20System/img/1.PNG)
 연산을 수행하고 컴퓨터의 모든 장치의 동작을 제어해서 중앙처리장치(CPU)로 불린다.
 
 ## 레지스터(Register)
@@ -34,31 +34,31 @@
 - 저장하는 정보의 종류에 따른분류
   - 데이터 레지스터, 주소 레지스터, 상태 레지스터
 
-![2](Operating System/img/1.PNG)
-![3](img/3.png)
+![2](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/2.PNG)
+![3](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/3.PNG)
   
   
 ### 프로세서의 동작
-![4](img/4.png)
+![4](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/4.PNG)
 계산하는 연산 장치(ALU) 안에 다양한 레지스터를 통해서 연산이 이루어진다.
 
 ## 메모리(Memory)
 프로그램(os, 사용자sw 등), 사용자 데이터를 저장하는 장치(기억장치)
 #### 메모리의 종류
-![5](img/5.png)
+![5](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/5.PNG)
 위로 갈수록 용량이 크고, 속도가 빠르고 가격이 비싸다. 최소한의 비용으로 성능을 내기 위해서 위 같은 계층이 탄생했다.
 ### 주 기억장치(Main memory)
 - 프로세서가 수행할 프로그램과 데이터를 저장하는 역할을 한다. 
 - DRAM과 DDR4를 주로 사용한다.
 - 디스크 입출력 병목현상(I/O bottleneck)해소 
-![6](img/6.png)
+![6](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/6.PNG)
 프로그램과 데이터는 반드시 메인메모리 안에 들어있어야 하는데 이유는 cpu의 속도를 disk가 따라 잡지 못한다. 이를 디스크 입출력 병목현상이라고 한다. 이를 해결하기 위해 메모리를 중간에 두어 cpu가 메모리에 있는 데이터를 사용하게 한다.
 
 ## 캐시
 프로세서 내부에 있는 메모리이다. 속도가 빠르고 가격이 비싸다는 특징이 있지만 메인 메모리의 입출력 병목 현상을 해결할 수 있다.
 
 ### 캐시의 동작
-![7](img/7.png)
+![7](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/7.PNG)
 - 일반적으론 HW(하드웨어)적으로 관리된다.
 - 캐시 히트 : 필요한 데이터 블록에 캐시 존재하면 프로세서에서 캐시에 있는 데이터 블록을 가져오게 된다. 이럴 경우 메인 메모리에 가는 시간과 가져오는 시간을 단축할 수 있게 되는 것을 의미한다.
 - 캐시 미스 : 필요한 데이터 블록이 캐시에 없으면 캐시에 들린 후 메인 메모리에 가야 되기 때문에 시간이 늘어나는 것을 의미한다.
@@ -77,7 +77,7 @@
 지역성은 캐시 적중률에 많은 도움을 주어서 캐시 히트가 발생할 가능성을 높혀준다. 다음 예를 살펴보자.
 
 #### 지역성의 동작 방법
-![8](img/8.png)
+![8](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/8.PNG)
 
 위 for문에서 캐시 히트가 발생할 가능성이 높은 것은 A일까? B일까?
 답은 A이다.
@@ -97,11 +97,11 @@
 
 ## 시스템 버스(System Bus) 
 하드웨어들이 데이터 및 신호를 주고 받는 물리적인 통로이다.
-![9](img/9.png)
-![10](img/10.png)
+![9](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/9.PNG)
+![10](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/10.PNG)
 
 ### 시스템 버스 동작 방법
-![11](img/11.png)
+![11](https://github.com/ChaewonHan/TIL/blob/77a0a11271285bd62fc3e370154cac189823f9be/Operating%20System/img/11.PNG)
 
 ## 주변장치
 프로세서와 메모리를 제외한 하드웨어을 의미한다.
