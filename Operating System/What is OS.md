@@ -118,7 +118,7 @@
   - 파일 생성 및 삭제
   - 디스크 공간 관리 등
 ## 운영체제의 구조
-![18](img/18.png)
+![18](https://github.com/ChaewonHan/TIL/blob/ff5e937fb7bf806157326b3674b13006fead7302/Operating%20System/img/18.PNG)
 ### 커널(kernel)
 - OS의 핵심 부분이여서 메모리에 상주해 있다.
 - 가장 빈번하게 사용되는 기능을 담당한다.
@@ -129,14 +129,14 @@
 - 비상주 프로그램
 - UI 등 서비스 프로그램이 해당된다.
 ### 단일 구조
-![19](img/19.png)
+![19](https://github.com/ChaewonHan/TIL/blob/ff5e937fb7bf806157326b3674b13006fead7302/Operating%20System/img/19.PNG)
 #### 장점
 - 커널 내 모듈 사이에서 직접 통신을 해서 효율적으로 자원을 관리하고 사용할 수 있다.
 #### 단점
 - 커널이 거대해져서 오류를 고치거나 추가 기능을 구현하는 등, 유지보수가 어렵다.
 - 동일 메모리에 모든 기능이 있어서 한 모듈의 문제가 전체 시스템에 영향이 간다.
 ### 계층 구조
-![20](img/20.png)
+![20](https://github.com/ChaewonHan/TIL/blob/ff5e937fb7bf806157326b3674b13006fead7302/Operating%20System/img/20.PNG)
 #### 장점
 - 모듈화가 되어 있어서 계층간 검증과 수정이 용이하다.
 - 설계와 구현이 단순하다.
@@ -144,7 +144,7 @@
 - 단일 구조라서 성능이 저하된다.
 - 원하는 기능 수행을 위해 여러 계층을 거쳐야한다.
 ### 마이크로 커널 구조
-![21](img/21.png)
+![21](https://github.com/ChaewonHan/TIL/blob/ff5e937fb7bf806157326b3674b13006fead7302/Operating%20System/img/21.PNG)
 - 커널의 크기를 최소화 한다.
 - 필수 기능만 포함되어 있다.
 - 기타 기능은 사용자 영역에서 수행할 수 있도록 설계되었다.
