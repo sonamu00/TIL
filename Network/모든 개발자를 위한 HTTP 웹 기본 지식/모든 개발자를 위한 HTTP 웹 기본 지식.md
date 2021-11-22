@@ -3,26 +3,75 @@
 - 지정한  IP주소에 데이터 전달하기 위한 규칙
 - 패킷(Packet)이라는 통신 단위로 데이터 전달
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a0ab67a6-a704-4882-9dd3-a5938b52b019/http1.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a0ab67a6-a704-4882-9dd3-a5938b52b019/http1.png)
+![http1](img/http1.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/efa190ad-9521-4172-9e9d-d5fd518cbb08/http2.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/efa190ad-9521-4172-9e9d-d5fd518cbb08/http2.png)
+![http2](img/http2.png)
 
 - 출발 지점(클라이언트)IP와 목적 지점(서버)IP, 기타 정보를 가진 것이 **패킷**
 
 ## IP 프로토콜의 한계
 
-- 비연결성
-    - 패킷을 받을 대상이 없거나 서비스 불능 상태에서도 패킷 전송
+#### 비연결성
+- 패킷을 받을 대상이 없거나 서비스 불능 상태에서도 패킷 전송
         
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/26033c36-7b48-460a-a8b8-1a7a7712ce72/http3.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/26033c36-7b48-460a-a8b8-1a7a7712ce72/http3.png)
+        ![http3](img/http3.png)
         
-- 비신뢰성
-    - 중간에 패킷이 사라질 수 있음
-    - 패킷이 순서대로 오지 않을 수 있음(데이터가 클 경우 나눠서 옴)
+#### 비신뢰성
+- 중간에 패킷이 사라질 수 있음
+- 패킷이 순서대로 오지 않을 수 있음(데이터가 클 경우 나눠서 옴)
         
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b9abb155-86a8-4bc4-ade5-c6c80043b206/HTTP4.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b9abb155-86a8-4bc4-ade5-c6c80043b206/HTTP4.png)
+![http4](img/HTTP4.png)
         
-        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70a761d2-c3ca-4405-b1e9-f8ff70976769/HTTP5.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70a761d2-c3ca-4405-b1e9-f8ff70976769/HTTP5.png)
+![http5](img/HTTP5.png)
         
-- 프로그램 구분
-    - 같은 IP를 사용하는 서버에서 통신하는 다른 애플리케이션들을 구분하지 못함
+#### 프로그램 구분
+- 같은 IP를 사용하는 서버에서 통신하는 다른 애플리케이션들을 구분하지 못함
+
+# TCP와 UDP
+
+## 인터넷 프로토콜의 4계층
+
+- 애플리케이션 계층 - HTTP, FTP
+- 전송 계층 - TCP, UDP
+- 인터넷 계층 - IP
+- 네트워크 인터페이스 계층
+
+![](img/HTTP6.png)
+
+⇒ 단계마다 하나에 패킷에 각각의 패킷 정보을 추가함
+
+## TCP 특징(전송 제어 프로토콜)
+
+#### 연결지향 - TCP 3 way handshake(가상 연결)
+
+![](img/TCP1.png)
+
+#### 데이터 전달 보증
+
+![](img/TCP2.png)
+
+#### 순서 보장
+
+![](img/http7.png)
+
+- 신뢰할 수 있는 프로토콜
+- 현재 대부분 사용함
+    
+    
+
+## TCP 3 way handshake
+
+![](img/http8.png)
+
+- SYN(접속 요청)과 ACK(요청 수락)를 3번 주고 받은 후 데이터를 전송
+    - 최근엔 3번에서 데이터 전송이 이루어지기도 함
+
+## UDP 특징(사용자 데이터그램 프로토콜)
+
+- 기능이 거의 없음(하얀 도화지에 비유)
+- TCP 3 way handshake X
+- 데이터 전달 보증 X
+- 순서 보장 X
+- 데이터 전달 순서가 보장되지 않지만, 단순하고 빠름
+- IP와 거의 같다. ⇒PORT와 체크섬(메세지 검증 데이터)
+- 애플리케이션에서 추가 작업 필요
