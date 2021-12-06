@@ -749,3 +749,307 @@
 - 503 Service Unavailable
     - 서버가 일시적인 과부하 또는 예정된 작업으로 잠시 요청을 처리할 수 없음
     - Retry-After 헤더 필드로 얼마뒤에 복구되는지 보낼 수도 있음
+
+# HTTP 헤더 - 일반헤더
+
+## HTTP 헤더
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ca0512d6-ee6a-46d9-b997-8db7b3c08663/Untitled.png](img/Untitled.png)
+
+- 문법 : `field-name : OWS field-value OWS` (OWS:띄어쓰기 허용)
+- field-name은 대소문자 구분 없음
+- 용도
+    - HTTP 전송에 필요한 모든 부가 정보
+    - EX) 메세지 바디의 내용, 메세지 바디의 크기, 압축, 인증, 요청, 클라이언트 등등..
+    - 표준 헤더가 너무 많음
+        - [https://en.wikipedia.org/wiki/List_of_HTTP_header_fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields)
+    - 필요시 임의의 헤더 추가 가능
+        - EX) `helloworld: hihi`
+
+## RFC2616(1999년) HTTP 헤더
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23095b16-3e2d-4a2a-8808-d30eeb483958/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23095b16-3e2d-4a2a-8808-d30eeb483958/Untitled.png)
+
+- 헤더 분류
+    - General 헤더: 메시지 전체에 적용되는 정보, 예) Connection: close
+    - Request 헤더: 요청 정보, 예) User-Agent: Mozilla/5.0 (Macintosh; ..)
+    - Response 헤더: 응답 정보, 예) Server: Apache
+    - Entity 헤더: 엔티티 바디 정보, 예) Content-Type: text/html, Content-Length: 3423
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8465f639-cced-43eb-a063-7901c8560cb1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8465f639-cced-43eb-a063-7901c8560cb1/Untitled.png)
+
+- 메시지 본문(message body)은 엔티티 본문(entity body)을 전달하는데 사용
+- 엔티티 본문은 요청이나 응답에서 전달할 실제 데이터
+- 엔티티 헤더는 엔티티 본문의 데이터를 해석할 수 있는 정보 제공
+    - 데이터 유형(html, json), 데이터 길이, 압축 정보 등등
+
+## RFC7230~7235(최신) HTTP 헤더
+
+- RFC2616이 페기되면서 HTTP 표준이 변경됨
+- 엔티티(Entity) → 표현(Representation)으로 명칭 변경
+    - 리소스를 JSON, HTML로 **표현해서 전달**하기 때문에 표현이 더 맞는 명칭임
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f968f-62e7-4fd1-b41b-9009f13149bd/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f968f-62e7-4fd1-b41b-9009f13149bd/Untitled.png)
+
+- 메시지 본문(message body)을 통해 표현 데이터 전달
+- 메시지 본문 = 페이로드(payload)
+- 표현은 요청이나 응답에서 전달할 실제 데이터
+- 표현 헤더는 표현 데이터를 해석할 수 있는 정보 제공
+- 데이터 유형(html, json), 데이터 길이, 압축 정보 등등
+- 참고: 표현 헤더는 표현 메타데이터와, 페이로드 메시지를 구분해야 하지만, 여기서는 생략
+
+# 표현
+
+- Content-Type: 표현 데이터의 형식
+- Content-Encoding: 표현 데이터의 압축 방식
+- Content-Language: 표현 데이터의 자연 언어
+- Content-Length: 표현 데이터의 길이
+- 표현 헤더는 전송, 응답 둘다 사용
+
+## Content-Type
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/149e8a5b-fdf8-40ec-b51d-3b30baabf432/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/149e8a5b-fdf8-40ec-b51d-3b30baabf432/Untitled.png)
+
+- 표현 데이터의 형식 설명
+- 미디어 타입, 문자 인코딩
+    - EX) `text/html; charset=utf-8` , `application/json` ,`image/png`
+
+## Content-Encoding
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2af9a3c4-3fab-4c5b-a7ef-a22460de0787/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2af9a3c4-3fab-4c5b-a7ef-a22460de0787/Untitled.png)
+
+- 표현 데이터를 압축하기 위해 사용
+- 데이터를 전달하는 곳에서 압축 후 인코딩 헤더 추가
+- 데이터를 읽는 쪽에서 인코딩 헤더의 정보로 압축 해제
+- EX) `gzip`, `deflate`, `identity`
+
+## Content-Language
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/42291678-7c27-493b-8ce6-68d237803c75/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/42291678-7c27-493b-8ce6-68d237803c75/Untitled.png)
+
+- 표현 데이터의 자연 언어를 표현
+- EX) ko, en, en-US
+
+## Content-Length
+
+- 표현 데이터의 길이
+- 바이트 단위
+- Transfer-Encoding(전송 코딩)을 사용하면 Content-Length를 사용하면 안됨
+
+# 콘텐츠 협상
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f40101fc-3cfe-4b94-9286-ccc372e241ed/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f40101fc-3cfe-4b94-9286-ccc372e241ed/Untitled.png)
+
+> 지원하는 언어가 주로 한국어 서브 영어인 브라우저를 사용할 때 독일어, 영어 지원 서버에 어떻게 언어 지원을 요청해야 할까?
+> 
+
+## 협상과 우선순위
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f098ba8-1505-41e4-9a70-3853573b9fe0/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f098ba8-1505-41e4-9a70-3853573b9fe0/Untitled.png)
+
+GET /event
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+
+- Quality Values(q) 값 사용
+- 0~1 범위 값을 가지고, 클수록 높은 우선순위를 가짐
+- 생략하면 기본값 1
+
+# 전송 방식
+
+- 단순 전송
+- 압축 전송
+- 분할 전송
+- 범위 전송
+
+## 단순 전송(Content-Length)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97795830-ca06-4920-9448-a21d7bfc7947/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97795830-ca06-4920-9448-a21d7bfc7947/Untitled.png)
+
+- 단순하게 요청하고 한 번에 받는 방법
+- Content에 대한 길이를 알 수 있을 때 사용해야함
+
+## 압축전송(Content-Encoding)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/10de2738-3e1a-4ab8-b430-883a605e5509/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/10de2738-3e1a-4ab8-b430-883a605e5509/Untitled.png)
+
+- Content를 압축해서 전송하는 방법
+- Content-Encoding을 사용해서 무엇으로 압축되어 있는지 명시해야함
+
+## 분할 전송(Transfer-Encoding)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d819447d-12cc-4ee5-8b9f-8bd11c01317c/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d819447d-12cc-4ee5-8b9f-8bd11c01317c/Untitled.png)
+
+- 바이트 단위로 쪼개서 여러 덩어리(chunked)로 보내는 방법
+- 리소스의 길이를 알 수 없기 때문에 Content-Length를 사용하면 안됨
+
+## 범위 전송(Content-Range)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51f801d0-9c66-49d4-8650-320cf7a00650/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51f801d0-9c66-49d4-8650-320cf7a00650/Untitled.png)
+
+- 범위를 지정해서 요청하고 데이터를 받아오는 방법
+
+# 일반정보
+
+- From: 유저 에이전트의 이메일 정보
+- Referer: 이전 웹 페이지 주소
+- User-Agent: 유저 에이전트 애플리케이션 정보
+- Server: 요청을 처리하는 오리진 서버의 소프트웨어 정보
+- Date: 메시지가 생성된 날짜
+
+## From
+
+- 유저 에이전트의 이메일 정보
+- 검색 엔진 같은 곳에서 주로 사용
+    - 크롤링 방지할 때 사용
+- 요청에서 사용
+
+## Referer
+
+- 현재 요청된 페이지의 이전 웹페이지 주소
+- A -> B로 이동하는 경우 B를 요청할 때 Referer: A 를 포함해서 요청
+- Referer를 사용해서 유입 경로 분석 가능
+- 요청에서 사용
+- TIP: Referer만으로 유입 경로를 파악하기엔 변수가 많기 때문에 주로 자바스크립트에 로그를 심거나 특별한 파라미터를 남겨서 경로를 분석하기도 함
+
+## User-Agent
+
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
+537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36
+
+- 클리이언트의 애플리케이션 정보(웹 브라우저 정보, 등등)
+- 통계 정보
+- 어떤 종류의 브라우저에서 장애가 발생하는지 파악 가능
+- 요청에서 사용
+
+## Server
+
+- ex) `Server: Apache/2.2.22 (Debian)`, `server: nginx`
+- 요청을 처리하는 ORIGIN 서버의 소프트웨어 정보
+    - ORIGIN: 프록시 서버가 아닌, 클라이언트에게 실제 응답을 해주는 서버
+- 응답에서 사용
+
+## Date
+
+- ex) `Date: Tue, 15 Nov 1994 08:12:31 GMT`
+- 메세지가 발생한 시간
+- 응답에서 사용
+
+# 특별한 정보
+
+- Host: 요청한 호스트 정보(도메인)
+- Location: 페이지 리다이렉션
+- Allow: 허용 가능한 HTTP 메서드
+- Retry-After: 유저 에이전트가 다음 요청을 하기까지 기다려야 하는 시간
+
+## Host
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae422a22-31d0-468e-8f34-32b2542b7040/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae422a22-31d0-468e-8f34-32b2542b7040/Untitled.png)
+
+- 요청한 호스트 정보(도메인)
+- 요청에서 사용
+- 하나의 서버가 여러 도메인을 처리해야할 때 사용(필수)
+- 하나의 IP주소에 여러 도메인이 적용되어 있을 때
+
+## Location
+
+- 페이지 리다이렉션
+- 웹 브라우저는 3xx 응답의 결과에 Location 헤더가 있으면, Location 위치로 자동 이동
+(리다이렉트)
+- 201 (Created): Location 값은 요청에 의해 생성된 리소스 URI
+- 3xx (Redirection): Location 값은 요청을 자동으로 리디렉션하기 위한 대상 리소스를 가리킴
+
+## Allow
+
+- 허용 가능한 HTTP 메서드
+- 허용하지 않은 메서드를 사용하면 405 (Method Not Allowed) 오류를 내리고 허용 가능한 메서드를 보여줘야함
+- EX) Allow: GET, HEAD, PUT
+- 잘 사용안함
+
+## Retry-After
+
+- 유저 에이전트가 다음 요청을 하기까지 기다려야 하는 시간
+- 503 (Service Unavailable): 서비스가 언제까지 불능인지 알려줄 수 있음
+- Retry-After: Fri, 31 Dec 1999 23:59:59 GMT (날짜 표기)
+- Retry-After: 120 (초단위 표기)
+
+# 인증
+
+## Authorization
+
+- 클라이언트 인증 정보를 서버에 전달
+- EX) Authorization: Basic xxxxxxxxxxxxxxxx
+- 인증 방식에 대한 여러 매커니즘에 따라 값이 달라짐
+    - ex) OAuth
+
+## WWW-Authenticate
+
+- 리소스 접근시 필요한 인증 방법 정의
+- 401 Unauthorized 응답과 함께 사용
+- ex) WWW-Authenticate: Newauth realm="apps", type=1,
+title="Login to \"apps\"", Basic realm="simple"
+
+# 쿠키
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ddfe01-e051-4fc2-bd71-5c041548d2ef/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ddfe01-e051-4fc2-bd71-5c041548d2ef/Untitled.png)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/946b1765-3008-4230-bbba-2c082849688a/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/946b1765-3008-4230-bbba-2c082849688a/Untitled.png)
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4aeee457-dd87-49dd-a9bd-f4f8018456d4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4aeee457-dd87-49dd-a9bd-f4f8018456d4/Untitled.png)
+
+- Set-Cookie: 서버에서 클라이언트로 쿠키 전달(응답)
+- Cookie: 클라이언트가 서버에서 받은 쿠키를 저장하고, HTTP 요청시 서버로 전달
+- 사용처
+    - 사용자 로그인 세션 관리: 사용자가 넘긴 데이터를 서버에 저장하고 세션키를 만들어서 set-Cookie로 넘김
+    - 광고 정보 트래킹
+- 쿠키 정보는 항상 서버에 저장됨
+    - 네트워크 트래픽 추가 유발
+    - 최소한의 정보만 사용해야함(세션 id, 인증 토큰)
+    - 서버에 전송하지 않고, 웹 브라우저 내부에 데이터를 저장하고 싶으면 웹 스트로지(locationStorage, sessionStrorage) 참고
+- 주의
+    - 보안의 민감한 데이터는 저장하면 안됨(주민번호, 신용카드 번호)
+
+## 쿠키 - 생명주기
+
+- Set-Cookie: expires=Sat, 26-Dec-2020 04:39:21 GMT
+    - 만료일이 되면 쿠키 삭제
+- Set-Cookie: max-age=3600 (3600초)
+    - 0이나 음수를 지정하면 쿠키 삭제
+- 세션 쿠키: 만료 날짜를 생략하면 브라우저 종료시 까지만 유지
+- 영속 쿠키: 만료 날짜를 입력하면 해당 날짜까지 유지
+
+## 쿠키 - 도메인
+
+- EX) domain=example.org
+- 명시: **명시한 문서 기준 도메인 + 서브 도메인 포함**
+    - domain=example.org를 지정해서 쿠키 생성
+        - example.org는 물론이고
+        - dev.example.org도 쿠키 접근
+    - 생략: 현재 문서 기준 도메인만 적용
+        - example.org 에서 쿠키를 생성하고 domain 지정을 생략
+        - example.org 에서만 쿠키 접근
+        - dev.example.org는 쿠키 미접근
+
+## 쿠키 - 경로
+
+- EX) path=/home
+- **이 경로를 포함한 하위 경로 페이지만 쿠키 접근**
+- 일반적으로 path=/ 루트로 지정
+- EX)
+    - **path=/home 지정**
+    - /home -> 가능
+    - /home/level1 -> 가능
+    - /home/level1/level2 -> 가능
+    - /hello -> 불가능
+
+## 쿠키 - 보안
+
+- Secure
+    - 쿠키는 http, https를 구분하지 않고 전송
+    - Secure를 적용하면 https인 경우에만 전송
+- HttpOnly
+    - XSS 공격 방지
+    - 자바스크립트에서 접근 불가(document.cookie)
+    - HTTP 전송에만 사용
+- SameSite
+    - XSRF 공격 방지
+    - 요청 도메인과 쿠키에 설정된 도메인이 같은 경우만 쿠키 전송
