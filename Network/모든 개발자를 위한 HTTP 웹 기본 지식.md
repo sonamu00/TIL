@@ -768,7 +768,7 @@
 
 ## RFC2616(1999년) HTTP 헤더
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23095b16-3e2d-4a2a-8808-d30eeb483958/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23095b16-3e2d-4a2a-8808-d30eeb483958/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/23095b16-3e2d-4a2a-8808-d30eeb483958/Untitled.png](img/Untitled1.png)
 
 - 헤더 분류
     - General 헤더: 메시지 전체에 적용되는 정보, 예) Connection: close
@@ -776,7 +776,7 @@
     - Response 헤더: 응답 정보, 예) Server: Apache
     - Entity 헤더: 엔티티 바디 정보, 예) Content-Type: text/html, Content-Length: 3423
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8465f639-cced-43eb-a063-7901c8560cb1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8465f639-cced-43eb-a063-7901c8560cb1/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8465f639-cced-43eb-a063-7901c8560cb1/Untitled.png](img/Untitled2.png)
 
 - 메시지 본문(message body)은 엔티티 본문(entity body)을 전달하는데 사용
 - 엔티티 본문은 요청이나 응답에서 전달할 실제 데이터
@@ -789,7 +789,7 @@
 - 엔티티(Entity) → 표현(Representation)으로 명칭 변경
     - 리소스를 JSON, HTML로 **표현해서 전달**하기 때문에 표현이 더 맞는 명칭임
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f968f-62e7-4fd1-b41b-9009f13149bd/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f968f-62e7-4fd1-b41b-9009f13149bd/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/885f968f-62e7-4fd1-b41b-9009f13149bd/Untitled.png](img/Untitled3.png)
 
 - 메시지 본문(message body)을 통해 표현 데이터 전달
 - 메시지 본문 = 페이로드(payload)
@@ -808,7 +808,7 @@
 
 ## Content-Type
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/149e8a5b-fdf8-40ec-b51d-3b30baabf432/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/149e8a5b-fdf8-40ec-b51d-3b30baabf432/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/149e8a5b-fdf8-40ec-b51d-3b30baabf432/Untitled.png](img/Untitled4.png)
 
 - 표현 데이터의 형식 설명
 - 미디어 타입, 문자 인코딩
@@ -816,7 +816,7 @@
 
 ## Content-Encoding
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2af9a3c4-3fab-4c5b-a7ef-a22460de0787/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2af9a3c4-3fab-4c5b-a7ef-a22460de0787/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2af9a3c4-3fab-4c5b-a7ef-a22460de0787/Untitled.png](img/Untitled5.png)
 
 - 표현 데이터를 압축하기 위해 사용
 - 데이터를 전달하는 곳에서 압축 후 인코딩 헤더 추가
@@ -825,7 +825,7 @@
 
 ## Content-Language
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/42291678-7c27-493b-8ce6-68d237803c75/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/42291678-7c27-493b-8ce6-68d237803c75/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/42291678-7c27-493b-8ce6-68d237803c75/Untitled.png](img/Untitled6.png)
 
 - 표현 데이터의 자연 언어를 표현
 - EX) ko, en, en-US
@@ -838,14 +838,14 @@
 
 # 콘텐츠 협상
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f40101fc-3cfe-4b94-9286-ccc372e241ed/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f40101fc-3cfe-4b94-9286-ccc372e241ed/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f40101fc-3cfe-4b94-9286-ccc372e241ed/Untitled.png](img/Untitled7.png)
 
 > 지원하는 언어가 주로 한국어 서브 영어인 브라우저를 사용할 때 독일어, 영어 지원 서버에 어떻게 언어 지원을 요청해야 할까?
 > 
 
 ## 협상과 우선순위
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f098ba8-1505-41e4-9a70-3853573b9fe0/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f098ba8-1505-41e4-9a70-3853573b9fe0/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5f098ba8-1505-41e4-9a70-3853573b9fe0/Untitled.png](img/Untitled8.png)
 
 GET /event
 Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
@@ -863,28 +863,28 @@ Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
 
 ## 단순 전송(Content-Length)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97795830-ca06-4920-9448-a21d7bfc7947/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97795830-ca06-4920-9448-a21d7bfc7947/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/97795830-ca06-4920-9448-a21d7bfc7947/Untitled.png](img/Untitled9.png)
 
 - 단순하게 요청하고 한 번에 받는 방법
 - Content에 대한 길이를 알 수 있을 때 사용해야함
 
 ## 압축전송(Content-Encoding)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/10de2738-3e1a-4ab8-b430-883a605e5509/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/10de2738-3e1a-4ab8-b430-883a605e5509/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/10de2738-3e1a-4ab8-b430-883a605e5509/Untitled.png](img/Untitled10.png)
 
 - Content를 압축해서 전송하는 방법
 - Content-Encoding을 사용해서 무엇으로 압축되어 있는지 명시해야함
 
 ## 분할 전송(Transfer-Encoding)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d819447d-12cc-4ee5-8b9f-8bd11c01317c/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d819447d-12cc-4ee5-8b9f-8bd11c01317c/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d819447d-12cc-4ee5-8b9f-8bd11c01317c/Untitled.png](img/Untitled11.png)
 
 - 바이트 단위로 쪼개서 여러 덩어리(chunked)로 보내는 방법
 - 리소스의 길이를 알 수 없기 때문에 Content-Length를 사용하면 안됨
 
 ## 범위 전송(Content-Range)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51f801d0-9c66-49d4-8650-320cf7a00650/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51f801d0-9c66-49d4-8650-320cf7a00650/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/51f801d0-9c66-49d4-8650-320cf7a00650/Untitled.png](img/Untitled12.png)
 
 - 범위를 지정해서 요청하고 데이터를 받아오는 방법
 
@@ -943,7 +943,7 @@ user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/
 
 ## Host
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae422a22-31d0-468e-8f34-32b2542b7040/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae422a22-31d0-468e-8f34-32b2542b7040/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ae422a22-31d0-468e-8f34-32b2542b7040/Untitled.png](img/Untitled13.png)
 
 - 요청한 호스트 정보(도메인)
 - 요청에서 사용
@@ -990,11 +990,11 @@ title="Login to \"apps\"", Basic realm="simple"
 
 # 쿠키
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ddfe01-e051-4fc2-bd71-5c041548d2ef/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ddfe01-e051-4fc2-bd71-5c041548d2ef/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d7ddfe01-e051-4fc2-bd71-5c041548d2ef/Untitled.png](img/Untitled14.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/946b1765-3008-4230-bbba-2c082849688a/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/946b1765-3008-4230-bbba-2c082849688a/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/946b1765-3008-4230-bbba-2c082849688a/Untitled.png](img/Untitled15.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4aeee457-dd87-49dd-a9bd-f4f8018456d4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4aeee457-dd87-49dd-a9bd-f4f8018456d4/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4aeee457-dd87-49dd-a9bd-f4f8018456d4/Untitled.png](img/Untitled16.png)
 
 - Set-Cookie: 서버에서 클라이언트로 쿠키 전달(응답)
 - Cookie: 클라이언트가 서버에서 받은 쿠키를 저장하고, HTTP 요청시 서버로 전달
