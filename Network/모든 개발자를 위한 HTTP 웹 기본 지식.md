@@ -1066,19 +1066,19 @@ title="Login to \"apps\"", Basic realm="simple"
 
 ### 캐시 적용
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3885c459-0f10-4ccf-824f-b6fceda595e1/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3885c459-0f10-4ccf-824f-b6fceda595e1/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3885c459-0f10-4ccf-824f-b6fceda595e1/Untitled.png](img/Untitled17.png)
 
 - 첫번째 요청을 할 때에는 요청 데이터와 cache-control(유효 캐시 시간)를 포함하여 전송함
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/96645d36-1df7-4425-a4ac-d48990151715/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/96645d36-1df7-4425-a4ac-d48990151715/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/96645d36-1df7-4425-a4ac-d48990151715/Untitled.png](img/Untitled18.png)
 
 - 응답 결과를 캐시에 저장함
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a984caf4-d385-4196-a8a2-34efe143cd35/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a984caf4-d385-4196-a8a2-34efe143cd35/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a984caf4-d385-4196-a8a2-34efe143cd35/Untitled.png](img/Untitled19.png)
 
 - 두 번째 요청을 할 때 요청한 데이터의 캐시가 유효한 시간인지 검증함
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c1dcae03-dc7d-45f4-89e2-f7f61886570d/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c1dcae03-dc7d-45f4-89e2-f7f61886570d/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c1dcae03-dc7d-45f4-89e2-f7f61886570d/Untitled.png](img/Untitled20.png)
 
 - 유효시간이 지나지 않았다면 캐시 저장소에서 조회한 결과를 반환함
 - 장점
@@ -1102,25 +1102,25 @@ title="Login to \"apps\"", Basic realm="simple"
 
 - 첫 번째 요청
     
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/34157127-4209-4879-be28-20140c290c51/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/34157127-4209-4879-be28-20140c290c51/Untitled.png)
+    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/34157127-4209-4879-be28-20140c290c51/Untitled.png](img/Untitled21.png)
     
     1. 요청 데이터를 데이터 최종 수정일을 포함해서 클라리언트에 보냄
     2. 응답 결과를 캐시에 저장함
 - 두 번째 요청 - 캐시 시간 초과
     
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/649aa4e9-4608-4f18-8771-f92698714da6/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/649aa4e9-4608-4f18-8771-f92698714da6/Untitled.png)
+    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/649aa4e9-4608-4f18-8771-f92698714da6/Untitled.png](img/Untitled22.png)
     
     1. 캐시 저장소에 요청하면서 유효시간을 체크함
     
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/001da166-2473-4a76-a393-12d717523642/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/001da166-2473-4a76-a393-12d717523642/Untitled.png)
+    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/001da166-2473-4a76-a393-12d717523642/Untitled.png](img/Untitled23.png)
     
     1. 서버에 유효시간을 초과한 캐시의 최종 수정일을 포함하여 요청을 보냄
     
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0fde12f8-0192-4a45-89fa-49253d46d10f/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0fde12f8-0192-4a45-89fa-49253d46d10f/Untitled.png)
+    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0fde12f8-0192-4a45-89fa-49253d46d10f/Untitled.png](img/Untitled24.png)
     
     1. 서버 데이터의 최종 수정일과 캐시의 최종 수정일을 확인함
     
-    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7c7b9dcb-2b85-4835-a94a-d978792e41ee/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7c7b9dcb-2b85-4835-a94a-d978792e41ee/Untitled.png)
+    ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7c7b9dcb-2b85-4835-a94a-d978792e41ee/Untitled.png](img/Untitled25.png)
     
     1. 데이터 최종 수정일이 같다면 HTTP body를 제외하고 304 메세지와 함께 응답 결과를 보냄
     2. 응답 결과를 재사용하고, 헤더 데이터를 갱신함
@@ -1156,9 +1156,9 @@ title="Login to \"apps\"", Basic realm="simple"
 
 ### ETag, If-None-Match
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8501f93a-246f-472a-a23d-d255e730a92e/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8501f93a-246f-472a-a23d-d255e730a92e/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8501f93a-246f-472a-a23d-d255e730a92e/Untitled.png](img/Untitled26.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/02dd75b0-3950-45b1-b1b8-2aa610c1b34e/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/02dd75b0-3950-45b1-b1b8-2aa610c1b34e/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/02dd75b0-3950-45b1-b1b8-2aa610c1b34e/Untitled.png](img/Untitled27.png)
 
 - ETag(Entity Tag)
 - 캐시용 데이터에 임의의 고유한 버전 이름을 달아둠
@@ -1205,11 +1205,11 @@ title="Login to \"apps\"", Basic realm="simple"
 
 ## 프록시 캐시
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6b175419-30fb-434c-a5ee-5058b03f570b/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6b175419-30fb-434c-a5ee-5058b03f570b/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6b175419-30fb-434c-a5ee-5058b03f570b/Untitled.png](img/Untitled28.png)
 
 - 멀리있는 원 서버에 바로 접근할 경우 로딩 시간이 길어짐
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/af6ba28b-6ef3-4753-b619-8f56d869d4ee/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/af6ba28b-6ef3-4753-b619-8f56d869d4ee/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/af6ba28b-6ef3-4753-b619-8f56d869d4ee/Untitled.png](img/Untitled29.png)
 
 - DNS 요청이 들어오면 웹 브라우저가 원 서버가 아닌 가까운 프록시 캐시 서버로 가도록 함
 - 로딩 시간이 빨라짐
@@ -1254,12 +1254,12 @@ title="Login to \"apps\"", Basic realm="simple"
 
 ### no-cache와 must-revalidate 차이
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6f1d25f-675f-4f35-81ae-11bc462fb867/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6f1d25f-675f-4f35-81ae-11bc462fb867/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b6f1d25f-675f-4f35-81ae-11bc462fb867/Untitled.png](img/Untitled30.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/13a6b813-6a45-4216-a3ea-fab4259055b7/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/13a6b813-6a45-4216-a3ea-fab4259055b7/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/13a6b813-6a45-4216-a3ea-fab4259055b7/Untitled.png](img/Untitled31.png)
 
 - 원 서버에 접근이 안될 때, 오류 대신 오래된 데이터를 보여줄 수 있음(200 Ok)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/757ddec4-ab82-4230-8934-6044132e300c/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/757ddec4-ab82-4230-8934-6044132e300c/Untitled.png)
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/757ddec4-ab82-4230-8934-6044132e300c/Untitled.png](img/Untitled32.png)
 
 - 원 서버에 접근이 안될 때, 504 504 Gateway Timeout 오류 발생
